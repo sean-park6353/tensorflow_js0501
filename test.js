@@ -1,11 +1,11 @@
 const tf = require("@tensorflow/tfjs");
-const fs = require("fs");
 const split = require("./split");
 require("@tensorflow/tfjs-node");
 
 async function main() {
   const adam = tf.train.adam(0.01);
   const model = tf.sequential();
+  const loadedModel = tf.sequential();
   model.add(
     tf.layers.dense({
       units: 10,
@@ -45,7 +45,7 @@ async function main() {
     "C:/Users/park ji seong/Desktop/데이터셋/b_12.csv"
   );
 
-  console.log(test_data.length);
+  // console.log(test_data.length);
 
   const x_test = []; // 예측할 데이터
   const y_test = []; // 결과 데이터
@@ -74,25 +74,27 @@ async function main() {
         console.log(`Epoch ${epoch}: loss = ${log.loss.toString()}`),
     },
   });
-
+  try {
+    const saveResults = await model.save("file://./model/jyp1");
+    console.log(saveResults);
+  } catch (e) {
+    console.log("저장 실패");
+  }
   console.log("===================저장 전 비교===========================");
-  const saveResults = await model.save("file://./model/jyp1");
-  model.predict(x_tmp_test).argMax(1).print();
-  y_tmp_test.argMax(1).print();
-  console.log("==========================================================");
-
-  console.log("===================저장 후 비교===========================");
   model.predict(x_tmp_test).argMax(1).print();
   y_tmp_test.argMax(1).print();
   console.log("==========================================================");
 
   try {
-    const loadedModel = await tf.loadLayersModel(
-      "file://./model/jyp1/model.json"
-    );
+    loadedModel = await tf.loadLayersModel("file://./model/jyp1/model.j");
   } catch (e) {
     console.log("불러오기 실패");
   }
+
+  console.log("===================저장 후 비교===========================");
+  model.predict(x_tmp_test).argMax(1).print();
+  y_tmp_test.argMax(1).print();
+  console.log("==========================================================");
 
   // const model_ = await tf.loadLayersModel("file://./model/jyp1/model.json");
   // model_.predict(x_tmp_test).argMax(1).print();
