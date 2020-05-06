@@ -3,6 +3,10 @@ const split = require("./split");
 require("@tensorflow/tfjs-node");
 
 async function main() {
+  function onBatchEnd(batch, logs) {
+    console.log("Accuracy", logs.acc);
+  }
+
   const adam = tf.train.adam(0.01);
   const model = tf.sequential();
   let loadedModel = tf.sequential();
@@ -81,8 +85,6 @@ async function main() {
     "C:/Users/park ji seong/Desktop/데이터셋/a_12.csv"
   );
 
-  // console.log(test_data.length);
-
   const x_test = []; // 예측할 데이터
   const y_test = []; // 결과 데이터
   const x_data = [];
@@ -103,13 +105,14 @@ async function main() {
   const x_tmp_test = tf.tensor2d(x_test);
   const y_tmp_test = tf.tensor2d(y_test);
 
-  await model.fit(x_tmp, y_tmp, {
-    epochs: 500,
-    callbacks: {
-      onEpochEnd: (epoch, log) =>
-        console.log(`Epoch ${epoch}: loss = ${log.loss.toString()}`),
-    },
-  });
+  await model
+    .fit(x_tmp, y_tmp, {
+      epochs: 500,
+      callbacks: { onBatchEnd },
+    })
+    .then((info) => {
+      console.log("Final accuracy", info.history.acc);
+    });
   try {
     const saveResults = await model.save("file://./model/");
     console.log(saveResults);
@@ -128,19 +131,14 @@ async function main() {
   }
 
   console.log("===================저장 후 비교===========================");
-  loadedModel.predict(x_tmp_test).argMax(1).print();
-  y_tmp_test.argMax(1).print();
-  var correct = 0;
-  for (i in Range(y_tmp_test.argMax(1))) {
-    if (y_tmp_test.argMax(1) == loadedModel.predict(x_tmp_test).argMax(1)) {
-      correct = correct + 1;
-    }
-  }
+
+  const predictions = loadedModel.predict(x_tmp_test).argMax(1);
+  const label = y_tmp_test.argMax(1);
+
+  predictions.print();
+  label.print();
 
   console.log("==========================================================");
-
-  // const model_ = await tf.loadLayersModel("file://./model/jyp1/model.json");
-  // model_.predict(x_tmp_test).argMax(1).print();
 }
 
 main();
