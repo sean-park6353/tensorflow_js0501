@@ -31,20 +31,6 @@ async function main() {
   const x_tmp_test = tf.tensor2d(x_test);
   const y_tmp_test = tf.tensor2d(y_test);
 
-  // await model.fit(x_tmp, y_tmp, {
-  //   epochs: 500,
-  //   callbacks: {
-  //     onEpochEnd: (epoch, log) =>
-  //       console.log(`Epoch ${epoch}: loss = ${log.loss.toString()}`),
-  //   },
-  // });
-  // try {
-  //   const saveResults = await model.save("file://./model/");
-  //   console.log(saveResults);
-  // } catch (e) {
-  //   console.log("저장 실패");
-  // }
-
   console.log("===================저장 전 비교===========================");
   model.predict(x_tmp_test).argMax(1).print();
   y_tmp_test.argMax(1).print();
