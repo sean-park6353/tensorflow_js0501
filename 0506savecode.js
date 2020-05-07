@@ -1,6 +1,12 @@
 const tf = require("@tensorflow/tfjs");
+
+// const a = tf.data.array([{ item: 1 }, { item: 2 }, { item: 3 }]);
+
+// a.forEach((item) => {
+//   console.log(item);
+// });
+
 const split = require("./split");
-const insert_words = require("./switch");
 const model_initialize = require("./model_initialize");
 require("@tensorflow/tfjs-node");
 
@@ -8,6 +14,8 @@ async function main() {
   model = model_initialize();
 
   const learning_data = await split("./dataset/acde.csv");
+  const test_data = await split("./dataset/a_12.csv");
+
   const x_test = [
     [
       70,
@@ -47,18 +55,28 @@ async function main() {
       46,
     ],
   ];
-  const y_test = [[1, 0, 0, 0, 0, 0]];
+  const y_test = [[1, 0, 0, 0, 0, 0]]; // 결과 데이터
   const x_data = [];
   const y_data = [];
+
+  // test_data.forEach((el) => {
+  //   x_test.push(el.splice(0, 35));
+  //   y_test.push(el.splice(el));
+  // });
 
   learning_data.forEach((el) => {
     x_data.push(el.splice(0, 35));
     y_data.push(el);
   });
 
+  // const x_tmp = tf.tensor2d(x_data);
+  // const y_tmp = tf.tensor2d(y_data);
   const x_realtime = tf.tensor2d(x_test);
-  const y_realtime = tf.tensor2d(y_test);
+  // const y_realtime = tf.tensor2d(y_test);
 
+  // console.log("===================저장 전 비교===========================");
+  // model.predict(x_tmp_test).argMax(1).print();
+  // y_tmp_test.argMax(1).print();
   try {
     loadedModel = await tf.loadLayersModel("file://./model/model.json");
   } catch (e) {
@@ -67,12 +85,8 @@ async function main() {
 
   console.log("==============================================");
   const predictions = loadedModel.predict(x_realtime, 20).argMax(1);
-  var p = predictions.dataSync()[0];
-  const label = y_realtime.argMax(1);
-  var l = label.dataSync()[0];
+  // const label = y_realtime.argMax(1);
 
-  console.log(`예측한 자세는 ${insert_words(p)}입니다`);
-  console.log(`실제 자세는 ${insert_words(l)}입니다`);
   console.log("==============================================");
 }
 
