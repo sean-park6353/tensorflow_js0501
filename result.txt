@@ -1,0 +1,1 @@
+{"kept":false,"isDisposedInternal":false,"shape":[120],"dtype":"int32","size":120,"strides":[],"dataId":{},"id":227,"rankType":"1","scopeId":194}

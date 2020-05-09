@@ -39,7 +39,11 @@ module.exports = () => {
       biasInitializer: "zeros",
     })
   );
-  model.compile({ optimizer: adam, loss: "categoricalCrossentropy" });
+  model.compile({
+    optimizer: adam,
+    loss: "categoricalCrossentropy",
+    metrics: ["accuracy"],
+  });
 
   loadedModel.add(
     tf.layers.dense({
