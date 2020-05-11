@@ -29,7 +29,7 @@ async function main() {
   const y_realtime = tf.tensor2d(y_test);
 
   try {
-    loadedModel = await tf.loadLayersModel("file://./model/model.json");
+    loadedModel = await tf.loadLayersModel("file://./model_1/model.json");
   } catch (e) {
     console.log("불러오기 실패");
   }
