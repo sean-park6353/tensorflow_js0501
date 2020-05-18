@@ -1,17 +1,19 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
-const startRouter = require("./start.js");
+// const bodyParser = require("body-parser");
+// const startRouter = require("./start.js");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/", startRouter);
+// app.use("/", startRouter);
 
-app.listen(4000, () => {
+app.listen(6353, () => {
   console.log(
     "================================================================"
   );
 });
+
+

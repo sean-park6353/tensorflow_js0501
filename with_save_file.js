@@ -11,7 +11,7 @@ async function main() {
   model = model_initialize();
 
   const data = await split(
-    "C:/Users/park ji seong/Desktop/데이터셋/새 폴더/0511_total_data.csv"
+    "C:/Users/park ji seong/Desktop/데이터셋/새 폴더/0518_등압력 100이하/0518_dataset.csv"
   );
   const test_data = await split(
     "C:/Users/park ji seong/Desktop/데이터셋/a_120.csv"
@@ -37,20 +37,20 @@ async function main() {
   const x_tmp_test = tf.tensor2d(x_test);
   const y_tmp_test = tf.tensor2d(y_test);
 
-  // await model.fit(x_tmp, y_tmp, {
-  //   epochs: 100,
-  //   callbacks: {
-  //     onEpochEnd: (epoch, log) =>
-  //       console.log(`Epoch ${epoch}: loss = ${log.loss.toString()}`),
-  //   },
-  // });
+  await model.fit(x_tmp, y_tmp, {
+    epochs: 60,
+    callbacks: {
+      onEpochEnd: (epoch, log) =>
+        console.log(`Epoch ${epoch}: loss = ${log.loss.toString()}`),
+    },
+  });
 
-  // try {
-  //   const saveResults = await model.save("file://./model_1/");
-  //   console.log(saveResults);
-  // } catch (e) {
-  //   console.log("저장 실패");
-  // }
+  try {
+    const saveResults = await model.save("file://./model_0518_epochs_60/");
+    console.log(saveResults);
+  } catch (e) {
+    console.log("저장 실패");
+  }
 
   console.log("===================저장 전 비교===========================");
   const past_x = model.predict(x_tmp_test).argMax(1);
@@ -61,7 +61,9 @@ async function main() {
   console.log(`예측한 자세는 ${insert_words(past_l)}입니다`);
 
   try {
-    loadedModel = await tf.loadLayersModel("file://./model_1/model.json");
+    loadedModel = await tf.loadLayersModel(
+      "file://./model_0518_epochs_60/model.json"
+    );
   } catch (e) {
     console.log("불러오기 실패");
   }
