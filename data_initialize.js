@@ -12,7 +12,7 @@ module.exports = async () => {
   const y_test = []; // 결과 데이터
   const x_data = [];
   const y_data = [];
-
+print("example1)"
   test_data.forEach((el) => {
     x_test.push(el.splice(0, 35));
     y_test.push(el.splice(el));
